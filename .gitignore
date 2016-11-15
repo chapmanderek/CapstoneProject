@@ -1,3 +1,8 @@
+#Project files to ignore
+state_ids.txt
+wage_data.txt
+state_info.sqlite
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
