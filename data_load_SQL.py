@@ -6,7 +6,7 @@ sql_connection = sqlite3.connect('state_info.sqlite')
 cur = sql_connection.cursor()
 cur.execute('DROP TABLE IF EXISTS StateInfo')
 cur.execute('''CREATE TABLE StateInfo 
-	(id INTEGER PRIMARY KEY, name TEXT UNIQUE, geo_tag TEXT UNIQUE, avg_wage_2014 INTEGER, avg_edu_2014 INTEGER, election_winner TEXT, elec_win_percent INTEGER)''')
+	(id INTEGER PRIMARY KEY, name TEXT UNIQUE, geo_tag TEXT UNIQUE, avg_wage_2014 INTEGER, avg_edu_2014 INTEGER, elec_winner TEXT, elec_win_percent INTEGER)''')
 
 # Load state ids into sql database
 print "Loading State ID #s..."
@@ -43,7 +43,29 @@ sql_connection.commit()
 edu_data.close()
 print "Loaded edu data for {0} states".format(counter)
 
+# Load election winner and data
+# Columns = State,Hillary Clinton %,Donald Trump %  --> hillary % = 1, trump % = 2
+elec_handle = open('ElectionResultsByState.csv')
+counter = 0
+for each_state_result in elec_handle:
+	counter += 1
+	winner = None
+	winner_percent = 0
+	each_state_result = each_state_result.replace('%', '')
+	each_state_result_parts = each_state_result.rstrip().split(',')
 
+	# determine who won
+	if each_state_result_parts[1] > each_state_result_parts[2]:  #hillary won state
+		winner = 'Clinton'
+		winner_percent = each_state_result_parts[1]
+	elif each_state_result_parts[2] > each_state_result_parts[1]:  #trump won state
+		winner = 'Trump'
+		winner_percent = each_state_result_parts[2]
+	else : print "Error loading some states election info"
+	cur.execute('UPDATE StateInfo SET elec_winner = ?, elec_win_percent = ? WHERE name = ?', (winner, winner_percent, each_state_result_parts[0]))
+print "Loaded election data for {0} states".format(counter) 
+sql_connection.commit()
+elec_handle.close()
 
 cur.close()
 
