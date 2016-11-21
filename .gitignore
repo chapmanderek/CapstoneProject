@@ -2,6 +2,7 @@
 state_ids.txt
 wage_data.txt
 state_info.sqlite
+edu_data.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
