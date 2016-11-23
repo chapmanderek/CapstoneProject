@@ -6,7 +6,7 @@ sql_connection = sqlite3.connect('state_info.sqlite')
 cur = sql_connection.cursor()
 cur.execute('DROP TABLE IF EXISTS StateInfo')
 cur.execute('''CREATE TABLE StateInfo 
-	(id INTEGER PRIMARY KEY, name TEXT UNIQUE, geo_tag TEXT UNIQUE, avg_wage_2014 INTEGER, avg_edu_2014 INTEGER, elec_winner TEXT, elec_win_percent INTEGER)''')
+	(id INTEGER PRIMARY KEY, name TEXT UNIQUE, geo_tag TEXT UNIQUE, avg_wage_2014 INTEGER, avg_edu_2015 INTEGER, elec_winner TEXT, elec_win_percent INTEGER)''')
 
 # Load state ids into sql database
 print "Loading State ID #s..."
@@ -38,7 +38,7 @@ edu_data = open("edu_data.txt")
 for each_edu in edu_data:
 	counter += 1
 	each_edu_parts = each_edu.split(":")
-	cur.execute('UPDATE StateInfo SET avg_edu_2014 = ? WHERE geo_tag = ?', (each_edu_parts[1], each_edu_parts[0]))
+	cur.execute('UPDATE StateInfo SET avg_edu_2015 = ? WHERE geo_tag = ?', (each_edu_parts[1], each_edu_parts[0]))
 sql_connection.commit()
 edu_data.close()
 print "Loaded edu data for {0} states".format(counter)

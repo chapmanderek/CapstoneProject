@@ -21,16 +21,17 @@ for each_tag in geotags:
 	psize = (pwin_percent - 45.41) * winner_percent_multiplier
 	
 	# wage data --> x value; percent won --> point size; edu data --> y value; winner --> point color hillary #002DFF  trump  #FF2D00
-	point_info = '[{x}, {y}, \'point {{size: {size}; fill-color: {color} }}\'],'.format(x = pwage_data, y = pedu_data, size= psize, color=pcolor)
+	point_info = '[{x}, {y}, \'point {{size: {size}; fill-color: {color} }}\', \'{name}\'],'.format(name = pname, x = pwage_data, y = pedu_data, size= psize, color=pcolor)
 	data = data + point_info + '\n'
 
 data = data + ']);' + '\n'
 
-beg_html = '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> \n <div id="chart_div" style="width: 900px; height: 500px;"></div>' + '\n'
+beg_html = '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> \n <div id="chart_div" style="width: 1000px; height: 700px;"></div>' + '\n'
 beg_js = '''<script>\ngoogle.charts.load('current', {'packages':['corechart']});\ngoogle.charts.setOnLoadCallback(drawChart);\nfunction drawChart() 
-{var data = google.visualization.arrayToDataTable([['X', 'Y', {'type': 'string', 'role': 'style'}],\n'''
+{var data = google.visualization.arrayToDataTable([['X', 'Y', {'type': 'string', 'role': 'style'}, {'type': 'string', 'role': 'tooltip'}],\n'''
 # data in middle
-js_options = 'var options = {legend: \'none\', width: 900, height: 600, xAxis: { minValue: 40000, maxValue: 60000, gridlines: 8 },\nyAxis: { minValue: .5, maxValue: .75 } };' + '\n'
+js_options = '''var options = {legend: 'none', width: 900, height: 600, title: '2016 Election Results by State', 
+				hAxis: { title: 'Avg Wage per Person', minValue: 40000, maxValue: 60000, gridlines: 8 },\nvAxis: { title: 'Amount of Education', minValue: .5, maxValue: .75 } };' + '\n'''
 end_js = '''var chart = new\ngoogle.visualization.ScatterChart(document.getElementById(\'chart_div\'));\nchart.draw(data, options);\n}\n</script>\n'''
 gvis_handle = open('gvis.html', 'w')
 gvis_handle.write(beg_html)
